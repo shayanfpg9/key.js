@@ -1,3 +1,5 @@
+console.time("init");
+
 function key(element, props = {}) {
   // when use as function without parameter
   if (
@@ -56,3 +58,12 @@ document.key = (keys, on) => {
 Element.prototype.key = function (keys, on) {
   key(this, { keys, on });
 };
+
+const css = `font-family:helvetica;
+            font-size:3rem;
+            font-weight:200;
+            color:#000300;
+            text-shadow: -2px -2px #0BE3E5, 2px 2px #EC1651;`;
+console.log("%c🗝key.js initialized successfully 😍", css);
+
+console.timeEnd("init");
