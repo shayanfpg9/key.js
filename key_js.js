@@ -24,7 +24,33 @@ function key(element, props = {}) {
     element.addEventListener(`key${props.on}`, (event) => {
       const keys = [],
         find = Object.keys(props.keys).find((key) => {
-          return event.key == key || event.code == key || event.keyCode == key;
+          let press = [];
+          if (key.includes("+")) {
+            key = key.split("+");
+            key.forEach((item) => {
+              item = item.trim();
+
+              if (item == "control" || item == "ctrl")
+                press.push(event.ctrlKey);
+              else if (item == "shift") press.push(event.shiftKey);
+              else if (item == "alt") press.push(event.altKey);
+              else {
+                press.push(
+                  event.key.toLowerCase() == item ||
+                    event.code.toLowerCase() == item ||
+                    event.keyCode == item
+                );
+              }
+            });
+          } else {
+            press.push(
+              (event.key.toLowerCase() == key || event.code.toLowerCase() == key || event.keyCode == key) &&
+                !event.altKey &&
+                !event.shiftKey &&
+                !event.ctrlKey
+            );
+          }
+          return !press.includes(false);
         });
 
       if (find !== undefined) keys.push(find);
