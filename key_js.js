@@ -19,6 +19,9 @@ function key(element, props = {}) {
   // default value of props.on
   if (props?.on == undefined) props.on = "press";
 
+  // default value of props.message
+  if (props?.message == undefined) props.message = true;
+
   // run event listener if we have some keys
   if (props?.keys !== undefined && typeof props.keys == "object") {
     element.addEventListener(`key${props.on}`, (event) => {
@@ -44,7 +47,9 @@ function key(element, props = {}) {
             });
           } else {
             press.push(
-              (event.key.toLowerCase() == key || event.code.toLowerCase() == key || event.keyCode == key) &&
+              (event.key.toLowerCase() == key ||
+                event.code.toLowerCase() == key ||
+                event.keyCode == key) &&
                 !event.altKey &&
                 !event.shiftKey &&
                 !event.ctrlKey
@@ -58,7 +63,9 @@ function key(element, props = {}) {
 
       keys.forEach((key) => {
         props.keys[key](event);
-        message(`key ${event.key} pressed\non event "${key}"`);
+
+        if (props.message)
+          message(`key ${event.key} pressed\non event "${key}"`);
       });
     });
   }
@@ -70,18 +77,18 @@ function message(msg) {
 }
 
 // global init
-Window.prototype.key = (keys, on) => {
-  key(window, { keys, on });
+Window.prototype.key = (keys, on, message) => {
+  key(window, { keys, on, message });
 };
 
 // init for document
-document.key = (keys, on) => {
+document.key = (keys, on, message) => {
   key(document, { keys, on });
 };
 
 // init for all of the elements
-Element.prototype.key = function (keys, on) {
-  key(this, { keys, on });
+Element.prototype.key = function (keys, on, message) {
+  key(this, { keys, on, message });
 };
 
 const css = `font-family:helvetica;
