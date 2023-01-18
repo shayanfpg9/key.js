@@ -22,19 +22,18 @@ function key(element, props = {}) {
   // run event listener if we have some keys
   if (props?.keys !== undefined && typeof props.keys == "object") {
     element.addEventListener(`key${props.on}`, (event) => {
-      for (const key in props.keys) {
-        if (key == "any") {
-          props.keys[key](event);
-          message(`key ${event.key} pressed\non event "${key}"`);
-        } else if (
-          event.key == key ||
-          event.code == key ||
-          event.keyCode == key
-        ) {
-          props.keys[key](event);
-          message(`key ${event.key} pressed\non event "${key}"`);
-        }
-      }
+      const keys = [],
+        find = Object.keys(props.keys).find((key) => {
+          return event.key == key || event.code == key || event.keyCode == key;
+        });
+
+      if (find !== undefined) keys.push(find);
+      props["any"] !== undefined ? "" : keys.push("any");
+
+      keys.forEach((key) => {
+        props.keys[key](event);
+        message(`key ${event.key} pressed\non event "${key}"`);
+      });
     });
   }
 }
